@@ -1,8 +1,28 @@
-console.log('hello word');
+fetch('/api/getUsername')
+    .then(res => res.json())
+    .then(user => updateData(user));
 
-/*import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+function updateData(user) {
+    console.log(user)
+    document.getElementById('username').value = '';
+    document.getElementById('age').value = '';
+    document.getElementById('user-display').innerHTML = 'user: "'+user.username + '", age: ' + user.age;
+}
 
-ReactDOM.render(<App />, document.getElementById('root'));
-*/
+document.getElementById('submit').onclick = function(){
+
+    const userData = {
+        username: document.getElementById('username').value,
+        age: document.getElementById('age').value
+    };
+
+    fetch('/api/updateUser', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    }).then(res => res.json())
+    .then(user => updateData(user));
+}
